@@ -1,0 +1,35 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+
+const apps = (await getCollection('apps')).sort((a, b) => a.data.order - b.data.order);
+const posts = (await getCollection('blog', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  .slice(0, 5);
+---
+
+<Base>
+  <h1>Hallo, ich bin Maxi.</h1>
+  <p>Ich entwickle Apps und schreibe hier darüber.</p>
+
+  <h2>Apps</h2>
+  <ul class="cards">
+    {apps.map((app) => (
+      <li>
+        <h3><a href={`/apps/${app.id}/`}>{app.data.name}</a></h3>
+        <p class="muted">{app.data.tagline}</p>
+      </li>
+    ))}
+  </ul>
+
+  <h2>Neueste Beiträge</h2>
+  <ul>
+    {posts.map((post) => (
+      <li>
+        <a href={`/blog/${post.id}/`}>{post.data.title}</a>
+        <span class="muted"> · {post.data.pubDate.toLocaleDateString('de-DE')}</span>
+      </li>
+    ))}
+  </ul>
+  <p><a href="/blog/">Alle Beiträge →</a></p>
+</Base>
