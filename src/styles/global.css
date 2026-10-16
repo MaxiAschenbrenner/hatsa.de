@@ -58,6 +58,8 @@ header.site nav a:hover { text-decoration: underline; }
 .lang-switch [aria-current] { font-weight: 600; }
 
 main { padding: 2.5rem 0 4rem; }
+main .container > :first-child,
+main .container > article > :first-child { margin-top: 0; }
 
 footer.site {
   border-top: 1px solid var(--fg);
