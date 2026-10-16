@@ -1,8 +1,9 @@
 ---
-import Base from '../layouts/Base.astro';
+import { localizedPaths } from '../../i18n/ui';
+import Base from '../../layouts/Base.astro';
 ---
 
-<Base title="Impressum">
+<Base lang="de" title="Impressum" alternates={localizedPaths.legalNotice}>
   <h1>Impressum</h1>
   <p>Maximilian Aschenbrenner</p>
   <h2>Kontakt</h2>

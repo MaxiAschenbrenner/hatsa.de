@@ -1,0 +1,32 @@
+---
+import PostEntries from '../../components/PostEntries.astro';
+import { getApps, getPostList, resolve } from '../../i18n/content';
+import { langPaths, localizePath, useTranslations, type Lang } from '../../i18n/ui';
+import Base from '../../layouts/Base.astro';
+
+export const getStaticPaths = langPaths;
+
+const { lang } = Astro.props as { lang: Lang };
+const t = useTranslations(lang);
+
+const apps = (await getApps())
+  .map((item) => ({ slug: item.slug, ...resolve(item, lang) }))
+  .sort((a, b) => a.entry.data.order - b.entry.data.order);
+const posts = (await getPostList(lang)).slice(0, 3);
+---
+
+<Base lang={lang}>
+  <h2>{t('nav.apps')}</h2>
+  <ul class="entries">
+    {apps.map((app) => (
+      <li>
+        <h3><a href={localizePath(lang, `/apps/${app.slug}/`)}>{app.entry.data.name}</a></h3>
+        <p class="muted">{app.entry.data.tagline}</p>
+      </li>
+    ))}
+  </ul>
+
+  <h2>{t('home.latestPosts')}</h2>
+  <PostEntries posts={posts} lang={lang} />
+  <p><a href={localizePath(lang, '/blog/')}>{t('home.allPosts')}</a></p>
+</Base>

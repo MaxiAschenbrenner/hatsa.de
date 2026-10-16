@@ -1,0 +1,32 @@
+---
+import type { PostListItem } from '../i18n/content';
+import { formatDate, localizePath, useTranslations, type Lang } from '../i18n/ui';
+
+interface Props {
+  posts: PostListItem[];
+  /** Language of the page the list is shown on. */
+  lang: Lang;
+}
+
+const { posts, lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<ul class="entries">
+  {posts.map((post) => (
+    <li>
+      <h3>
+        <a href={localizePath(post.lang, `/blog/${post.slug}/`)} hreflang={post.lang}>{post.entry.data.title}</a>
+      </h3>
+      <p class="muted">
+        {[
+          formatDate(lang, post.entry.data.pubDate),
+          post.lang !== lang && t(`post.inLang.${post.lang}`),
+          post.entry.data.description,
+        ]
+          .filter(Boolean)
+          .join(' · ')}
+      </p>
+    </li>
+  ))}
+</ul>

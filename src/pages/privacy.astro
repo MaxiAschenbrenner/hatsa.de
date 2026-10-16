@@ -1,0 +1,20 @@
+---
+import { localizedPaths } from '../i18n/ui';
+import Base from '../layouts/Base.astro';
+---
+
+<Base lang="en" title="Privacy" alternates={localizedPaths.privacy}>
+  <h1>Privacy policy</h1>
+  <p class="notice">
+    This is a translation provided for convenience. Only the <a href={localizedPaths.privacy.de} hreflang="de">German version (Datenschutzerklärung)</a> is legally binding.
+  </p>
+  <!-- TODO: add a complete privacy policy for the website (keep in sync with the German version). -->
+  <h2>Hosting</h2>
+  <p>
+    This website is hosted on GitHub Pages (GitHub Inc., 88 Colin P Kelly Jr St, San Francisco, CA 94107, USA).
+    When you visit the site, GitHub processes technically necessary data such as your IP address.
+    More information: <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement">GitHub Privacy Statement</a>.
+  </p>
+  <h2>Cookies and tracking</h2>
+  <p>This website does not set cookies and does not use any tracking.</p>
+</Base>

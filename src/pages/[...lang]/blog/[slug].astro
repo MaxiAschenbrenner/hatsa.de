@@ -1,0 +1,35 @@
+---
+import { render } from 'astro:content';
+import { getPosts } from '../../../i18n/content';
+import { formatDate, langParam, localizePath, useTranslations, type Lang } from '../../../i18n/ui';
+import Base from '../../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const posts = await getPosts();
+  // One page per existing translation; untranslated posts only exist in their original language.
+  return posts.flatMap(({ slug, translations }) =>
+    (Object.keys(translations) as Lang[]).map((lang) => ({
+      params: { lang: langParam(lang), slug },
+      props: { lang, post: translations[lang]!, translations },
+    })),
+  );
+}
+
+const { lang, post, translations } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(post);
+const alternates = Object.fromEntries(
+  Object.keys(translations).map((l) => [l, localizePath(l as Lang, `/blog/${Astro.params.slug}/`)]),
+);
+---
+
+<Base lang={lang} title={post.data.title} description={post.data.description} alternates={alternates} fallbackPath="/blog/">
+  <article>
+    <h1>{post.data.title}</h1>
+    <p class="muted">
+      {formatDate(lang, post.data.pubDate)}
+      {post.data.updatedDate && <> · {t('post.updated')} {formatDate(lang, post.data.updatedDate)}</>}
+    </p>
+    <Content />
+  </article>
+</Base>

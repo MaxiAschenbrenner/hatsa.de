@@ -1,0 +1,14 @@
+---
+import { localizedPaths } from '../i18n/ui';
+import Base from '../layouts/Base.astro';
+---
+
+<Base lang="en" title="Legal notice" alternates={localizedPaths.legalNotice}>
+  <h1>Legal notice</h1>
+  <p class="notice">
+    This is a translation provided for convenience. Only the <a href={localizedPaths.legalNotice.de} hreflang="de">German version (Impressum)</a> is legally binding.
+  </p>
+  <p>Maximilian Aschenbrenner</p>
+  <h2>Contact</h2>
+  <p>Email: <a href="mailto:hatsa.apps@gmail.com">hatsa.apps@gmail.com</a></p>
+</Base>

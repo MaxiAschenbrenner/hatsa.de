@@ -1,8 +1,9 @@
 ---
-import Base from '../layouts/Base.astro';
+import { localizedPaths } from '../../i18n/ui';
+import Base from '../../layouts/Base.astro';
 ---
 
-<Base title="Datenschutz">
+<Base lang="de" title="Datenschutz" alternates={localizedPaths.privacy}>
   <h1>Datenschutzerklärung</h1>
   <!-- TODO: vollständige Datenschutzerklärung für die Webseite ergänzen. -->
   <h2>Hosting</h2>

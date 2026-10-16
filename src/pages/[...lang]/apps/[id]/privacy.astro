@@ -1,0 +1,30 @@
+---
+import { appPaths } from '../../../../i18n/content';
+import { localizePath } from '../../../../i18n/ui';
+import Base from '../../../../layouts/Base.astro';
+
+export const getStaticPaths = appPaths;
+
+const { lang, app } = Astro.props;
+const { name } = app.data;
+const text = {
+  en: {
+    title: `${name} – Privacy`,
+    description: `Privacy policy for ${name}.`,
+    heading: `Privacy policy for ${name}`,
+    body: `The privacy policy for ${name} will be published here before the app is released.`,
+  },
+  de: {
+    title: `${name} – Datenschutz`,
+    description: `Datenschutzerklärung für ${name}.`,
+    heading: `Datenschutzerklärung für ${name}`,
+    body: `Die Datenschutzerklärung für ${name} wird vor der Veröffentlichung der App hier bereitgestellt.`,
+  },
+}[lang];
+---
+
+<Base lang={lang} title={text.title} description={text.description}>
+  <p><a href={localizePath(lang, `/apps/${Astro.params.id}/`)}>← {name}</a></p>
+  <h1>{text.heading}</h1>
+  <p>{text.body}</p>
+</Base>

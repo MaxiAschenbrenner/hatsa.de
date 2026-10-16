@@ -1,17 +1,42 @@
 ---
 import '../styles/global.css';
+import {
+  defaultLang,
+  languages,
+  langs,
+  localizedPaths,
+  localizePath,
+  stripLang,
+  useTranslations,
+  type Lang,
+} from '../i18n/ui';
 
 interface Props {
+  lang: Lang;
   title?: string;
   description?: string;
+  /** Path of this page per language. Defaults to the same path in every language. */
+  alternates?: Partial<Record<Lang, string>>;
+  /** Language-neutral path the language switcher links to when this page has no translation. */
+  fallbackPath?: string;
 }
 
-const { title, description = 'Apps und Blog von Maximilian Aschenbrenner.' } = Astro.props;
+const neutralPath = stripLang(Astro.url.pathname);
+const {
+  lang,
+  title,
+  alternates = Object.fromEntries(langs.map((l) => [l, localizePath(l, neutralPath)])),
+  fallbackPath = '/',
+} = Astro.props;
+const t = useTranslations(lang);
+const description = Astro.props.description ?? t('site.description');
 const fullTitle = title ? `${title} · hatsa.de` : 'hatsa.de';
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const switcherLangs: Lang[] = ['de', 'en'];
+const alternateLinks = Object.entries(alternates) as [Lang, string][];
 ---
 
-<html lang="de">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,7 +45,13 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/site.webmanifest" />
     <link rel="canonical" href={canonical} />
-    <link rel="alternate" type="application/rss+xml" title="hatsa.de Blog" href="/rss.xml" />
+    {alternateLinks.map(([l, path]) => (
+      <link rel="alternate" hreflang={l} href={new URL(path, Astro.site)} />
+    ))}
+    {alternates[defaultLang] && (
+      <link rel="alternate" hreflang="x-default" href={new URL(alternates[defaultLang], Astro.site)} />
+    )}
+    <link rel="alternate" type="application/rss+xml" title={t('rss.title')} href={localizePath(lang, '/rss.xml')} />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <meta name="generator" content={Astro.generator} />
     <title>{fullTitle}</title>
@@ -28,14 +59,29 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={lang} />
   </head>
   <body>
     <header class="site">
       <div class="container">
-        <a class="logo" href="/">hatsa</a>
+        <a class="logo" href={localizePath(lang, '/')}>hatsa</a>
         <nav>
-          <a href="/apps/">Apps</a>
-          <a href="/blog/">Blog</a>
+          <a href={localizePath(lang, '/apps/')}>{t('nav.apps')}</a>
+          <a href={localizePath(lang, '/blog/')}>{t('nav.blog')}</a>
+          <div class="lang-switch">
+            {switcherLangs.map((l, i) => (
+              <>
+                {i > 0 && <span aria-hidden="true">/</span>}
+                {l === lang ? (
+                  <span aria-current="true" title={languages[l]}>{l.toUpperCase()}</span>
+                ) : (
+                  <a href={alternates[l] ?? localizePath(l, fallbackPath)} hreflang={l} lang={l} title={languages[l]}>
+                    {l.toUpperCase()}
+                  </a>
+                )}
+              </>
+            ))}
+          </div>
         </nav>
       </div>
     </header>
@@ -47,9 +93,10 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <footer class="site">
       <div class="container">
         <span>© {new Date().getFullYear()} hatsa.de</span>
-        <a href="/impressum/">Impressum</a>
-        <a href="/datenschutz/">Datenschutz</a>
-        <a href="/rss.xml">RSS</a>
+        <a href={localizePath(lang, '/about/')}>{t('footer.about')}</a>
+        <a href={localizedPaths.legalNotice[lang]}>{t('footer.legalNotice')}</a>
+        <a href={localizedPaths.privacy[lang]}>{t('footer.privacy')}</a>
+        <a href={localizePath(lang, '/rss.xml')}>RSS</a>
       </div>
     </footer>
   </body>

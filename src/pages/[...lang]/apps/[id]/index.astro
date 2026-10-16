@@ -1,0 +1,33 @@
+---
+import { render } from 'astro:content';
+import { appPaths } from '../../../../i18n/content';
+import { localizePath, useTranslations } from '../../../../i18n/ui';
+import Base from '../../../../layouts/Base.astro';
+
+export const getStaticPaths = appPaths;
+
+const { lang, app } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(app);
+const base = localizePath(lang, `/apps/${Astro.params.id}/`);
+---
+
+<Base lang={lang} title={app.data.name} description={app.data.tagline}>
+  <h1>{app.data.name}</h1>
+  <p class="status">{t(`app.status.${app.data.status}`)}</p>
+  <p class="muted">{app.data.tagline}</p>
+
+  {(app.data.appStoreUrl || app.data.playStoreUrl) && (
+    <p>
+      {app.data.appStoreUrl && <a href={app.data.appStoreUrl}>{t('app.appStore')}</a>}
+      {app.data.appStoreUrl && app.data.playStoreUrl && ' · '}
+      {app.data.playStoreUrl && <a href={app.data.playStoreUrl}>{t('app.playStore')}</a>}
+    </p>
+  )}
+
+  <Content />
+
+  <p>
+    <a href={`${base}support/`}>{t('app.support')}</a> · <a href={`${base}privacy/`}>{t('app.privacy')}</a>
+  </p>
+</Base>
