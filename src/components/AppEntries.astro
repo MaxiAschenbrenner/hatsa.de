@@ -1,0 +1,25 @@
+---
+import type { AppListItem } from '../i18n/content';
+import { localizePath, type Lang } from '../i18n/ui';
+import AppIcon from './AppIcon.astro';
+
+interface Props {
+  apps: AppListItem[];
+  /** Language of the page the list is shown on. */
+  lang: Lang;
+}
+
+const { apps, lang } = Astro.props;
+---
+
+<ul class="entries">
+  {apps.map((app) => (
+    <li class="app-entry">
+      <AppIcon name={app.entry.data.name} icon={app.entry.data.icon} size={56} />
+      <div>
+        <h3><a href={localizePath(lang, `/apps/${app.slug}/`)}>{app.entry.data.name}</a></h3>
+        <p class="muted">{app.entry.data.tagline}</p>
+      </div>
+    </li>
+  ))}
+</ul>

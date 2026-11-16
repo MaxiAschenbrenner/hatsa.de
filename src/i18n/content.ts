@@ -34,6 +34,15 @@ export async function getApps() {
   return groupBySlug(await getCollection('apps'));
 }
 
+/** All apps as listed on a `lang` page, in their configured order. */
+export async function getAppList(lang: Lang) {
+  return (await getApps())
+    .map((item) => ({ slug: item.slug, ...resolve(item, lang) }))
+    .sort((a, b) => a.entry.data.order - b.entry.data.order);
+}
+
+export type AppListItem = Awaited<ReturnType<typeof getAppList>>[number];
+
 /** `getStaticPaths` result for app pages: every app in every language, falling back to untranslated content. */
 export async function appPaths() {
   return (await getApps()).flatMap((item) =>
