@@ -16,9 +16,11 @@ const blog = defineCollection({
 
 const apps = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/apps' }),
-  schema: z.object({
+  schema: ({ image }) => z.object({
     name: z.string(),
     tagline: z.string(),
+    /** App icon, relative to the Markdown file, e.g. `../icons/weightwidget.png`. */
+    icon: image().optional(),
     status: z.enum(['in-entwicklung', 'beta', 'veroeffentlicht']).default('in-entwicklung'),
     platforms: z.array(z.string()).default([]),
     appStoreUrl: z.url().optional(),

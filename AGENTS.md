@@ -20,3 +20,7 @@ Consult these guides before working on related tasks:
 - [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
 - [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
 - [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
+
+## App pages
+
+When the user attaches a ZIP file for an app page (`<slug>-hatsa.zip`), import it as described in part 2 of [docs/app-seite.md](docs/app-seite.md). Part 1 of that file is the prompt the user runs in the app's own project to create the ZIP.

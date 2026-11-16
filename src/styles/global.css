@@ -93,3 +93,34 @@ img { max-width: 100%; height: auto; }
   color: var(--muted);
   font-size: 0.9rem;
 }
+
+/* iOS-style app icon: rounded square, ~22% corner radius. */
+.app-icon {
+  display: block;
+  flex: none;
+  border-radius: 22.5%;
+}
+.app-icon-fallback {
+  width: var(--size);
+  height: var(--size);
+  display: grid;
+  place-items: center;
+  border: 1.5px solid var(--fg);
+  font-size: calc(var(--size) * 0.45);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.app-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+.app-title h1 { margin: 0; }
+
+ul.entries li.app-entry {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

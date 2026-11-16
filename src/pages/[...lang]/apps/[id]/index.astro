@@ -2,6 +2,7 @@
 import { render } from 'astro:content';
 import { appPaths } from '../../../../i18n/content';
 import { localizePath, useTranslations } from '../../../../i18n/ui';
+import AppIcon from '../../../../components/AppIcon.astro';
 import Base from '../../../../layouts/Base.astro';
 
 export const getStaticPaths = appPaths;
@@ -13,7 +14,10 @@ const base = localizePath(lang, `/apps/${Astro.params.id}/`);
 ---
 
 <Base lang={lang} title={app.data.name} description={app.data.tagline}>
-  <h1>{app.data.name}</h1>
+  <header class="app-title">
+    <AppIcon name={app.data.name} icon={app.data.icon} size={72} />
+    <h1>{app.data.name}</h1>
+  </header>
   <p class="status">{t(`app.status.${app.data.status}`)}</p>
   <p class="muted">{app.data.tagline}</p>
 

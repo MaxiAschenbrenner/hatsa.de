@@ -1,0 +1,21 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+
+interface Props {
+  name: string;
+  icon?: ImageMetadata;
+  /** Edge length in CSS pixels. */
+  size: number;
+}
+
+const { name, icon, size } = Astro.props;
+---
+
+{icon ? (
+  <Image class="app-icon" src={icon} alt="" width={size} height={size} densities={[1, 2, 3]} />
+) : (
+  <span class="app-icon app-icon-fallback" style={`--size: ${size}px`} aria-hidden="true">
+    {name.charAt(0)}
+  </span>
+)}
